@@ -1,0 +1,30 @@
+version: '3,4'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgresql_container
+    restart: always
+    environment:
+      POSTGRES_DB: ead_authuser # Nome da base de dados para a API Spring
+      POSTGRES_USER: postgres # Substitua pelo nome de usuário desejado
+      POSTGRES_PASSWORD: d3m37r10 # Substitua pela senha desejada
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  spring-app:
+    build:
+      context: . # Caminho para o diretório da sua aplicação Spring (onde está o Dockerfile)
+      dockerfile: Dockerfile
+    container_name: authuser_container
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080" # Porta da API Spring
+
+volumes:
+  pgdata:
+
